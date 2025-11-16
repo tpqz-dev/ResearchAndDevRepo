@@ -44,6 +44,7 @@ A simple WPF application for viewing comic book archives (.cbr files).
 - **Navigation**: Navigate through pages using Previous/Next buttons
 - **Page Counter**: Shows current page number and total pages
 - **Full Image Support**: Supports common image formats (JPG, PNG, GIF, BMP, WebP)
+- **Pan/Drag**: Click and drag with the left mouse button to pan around the image
 
 #### Getting Started
 

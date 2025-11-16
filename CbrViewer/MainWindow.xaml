@@ -29,8 +29,12 @@
         
         <!-- Main Image Display Area -->
         <Border BorderBrush="Gray" BorderThickness="1" Margin="10">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
-                         VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Name="ImageScrollViewer" 
+                         HorizontalScrollBarVisibility="Auto" 
+                         VerticalScrollBarVisibility="Auto"
+                         MouseLeftButtonDown="ScrollViewer_MouseLeftButtonDown"
+                         MouseMove="ScrollViewer_MouseMove"
+                         MouseLeftButtonUp="ScrollViewer_MouseLeftButtonUp">
                 <Image Name="ImageDisplay" 
                        Stretch="Uniform" 
                        HorizontalAlignment="Center" 

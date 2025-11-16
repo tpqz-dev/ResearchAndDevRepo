@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using SharpCompress.Archives;
@@ -14,6 +15,10 @@ public partial class MainWindow : Window
 {
     private List<byte[]> imageData = new();
     private int currentImageIndex = 0;
+    
+    // Pan feature variables
+    private bool isPanning = false;
+    private Point panStartPoint;
 
     public MainWindow()
     {
@@ -138,5 +143,42 @@ public partial class MainWindow : Window
     private void Exit_Click(object sender, RoutedEventArgs e)
     {
         Application.Current.Shutdown();
+    }
+
+    // Pan feature event handlers
+    private void ScrollViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (ImageDisplay.Source != null)
+        {
+            isPanning = true;
+            panStartPoint = e.GetPosition(ImageScrollViewer);
+            ImageScrollViewer.Cursor = Cursors.Hand;
+            ImageScrollViewer.CaptureMouse();
+        }
+    }
+
+    private void ScrollViewer_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (isPanning)
+        {
+            Point currentPoint = e.GetPosition(ImageScrollViewer);
+            double offsetX = currentPoint.X - panStartPoint.X;
+            double offsetY = currentPoint.Y - panStartPoint.Y;
+
+            ImageScrollViewer.ScrollToHorizontalOffset(ImageScrollViewer.HorizontalOffset - offsetX);
+            ImageScrollViewer.ScrollToVerticalOffset(ImageScrollViewer.VerticalOffset - offsetY);
+
+            panStartPoint = currentPoint;
+        }
+    }
+
+    private void ScrollViewer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (isPanning)
+        {
+            isPanning = false;
+            ImageScrollViewer.Cursor = Cursors.Arrow;
+            ImageScrollViewer.ReleaseMouseCapture();
+        }
     }
 }

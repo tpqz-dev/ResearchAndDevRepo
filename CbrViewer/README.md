@@ -10,6 +10,7 @@ A simple WPF application for viewing comic book archives (.cbr files).
 - **Page Counter**: Shows current page number and total pages
 - **Full Image Support**: Supports common image formats (JPG, PNG, GIF, BMP, WebP)
 - **Zoom & Scroll**: Images scale to fit the window, with scrolling for larger images
+- **Pan/Drag**: Click and drag with the left mouse button to pan around the image
 
 ## Getting Started
 
@@ -44,7 +45,8 @@ dotnet run --project CbrViewer/CbrViewer.csproj
 2. Click **File → Open CBR File...** from the menu
 3. Select a .cbr file from your file system
 4. Use the **Previous** and **Next** buttons to navigate between pages
-5. The page counter shows your current position (e.g., "Page 1 of 25")
+5. Click and drag with the left mouse button to pan/move around the image
+6. The page counter shows your current position (e.g., "Page 1 of 25")
 
 ## Supported File Formats
 
