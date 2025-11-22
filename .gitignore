@@ -3,6 +3,10 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# ImageBoard runtime data
+**/ProjectImages/
+**/appstate.json
+
 # dotenv files
 .env
 
