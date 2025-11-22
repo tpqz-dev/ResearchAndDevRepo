@@ -18,6 +18,26 @@ namespace ImageBoard.Views
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+            KeyDown += MainWindow_KeyDown;
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete && ViewModel.SelectedImage != null)
+            {
+                ViewModel.DeleteImageCommand.Execute(ViewModel.SelectedImage);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.C && Keyboard.Modifiers == ModifierKeys.Control && ViewModel.SelectedImage != null)
+            {
+                ViewModel.CopyImageCommand.Execute(ViewModel.SelectedImage);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                ViewModel.PasteImageCommand.Execute(null);
+                e.Handled = true;
+            }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

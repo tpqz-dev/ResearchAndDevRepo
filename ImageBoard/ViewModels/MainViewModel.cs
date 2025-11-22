@@ -38,6 +38,7 @@ namespace ImageBoard.ViewModels
         private string _baseDirectory;
         private string _imagesDirectory;
         private int _nextZIndex = 1;
+        private ImageItemViewModel? _copiedImage;
 
         public MainViewModel()
         {
@@ -165,6 +166,63 @@ namespace ImageBoard.ViewModels
         private void ToggleTopMost()
         {
             IsTopMost = !IsTopMost;
+        }
+
+        [RelayCommand]
+        private void CopyImage(ImageItemViewModel? image)
+        {
+            if (image != null)
+            {
+                _copiedImage = image;
+            }
+        }
+
+        [RelayCommand]
+        private void PasteImage()
+        {
+            if (_copiedImage != null)
+            {
+                try
+                {
+                    var sourcePath = Path.Combine(_baseDirectory, _copiedImage.SourcePath);
+                    if (File.Exists(sourcePath))
+                    {
+                        var fileName = Path.GetFileName(sourcePath);
+                        var destPath = Path.Combine(_imagesDirectory, Guid.NewGuid().ToString() + Path.GetExtension(fileName));
+                        
+                        File.Copy(sourcePath, destPath, true);
+
+                        var relativePath = Path.GetRelativePath(_baseDirectory, destPath);
+                        var imageItem = new ImageItem
+                        {
+                            SourcePath = relativePath,
+                            X = _copiedImage.X + 20,
+                            Y = _copiedImage.Y + 20,
+                            Width = _copiedImage.Width,
+                            Height = _copiedImage.Height,
+                            Scale = _copiedImage.Scale,
+                            IsFlippedX = _copiedImage.IsFlippedX,
+                            IsFlippedY = _copiedImage.IsFlippedY,
+                            ZIndex = _nextZIndex++
+                        };
+
+                        var viewModel = new ImageItemViewModel(imageItem, destPath);
+                        Images.Add(viewModel);
+                        
+                        // Select the pasted image
+                        foreach (var img in Images)
+                        {
+                            img.IsSelected = false;
+                        }
+                        viewModel.IsSelected = true;
+                        SelectedImage = viewModel;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to paste image: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         public void SaveState(double windowWidth, double windowHeight, double windowTop, double windowLeft)

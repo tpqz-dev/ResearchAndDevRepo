@@ -66,7 +66,11 @@ dotnet run --project ImageBoard/ImageBoard.csproj
 3. **Manipulate Images**:
    - Select: Left click on an image
    - Move: Drag selected image
-   - Right-click on image for more options
+   - Resize: Ctrl + Mouse Wheel while hovering over image
+   - Copy: Ctrl+C or right-click > Copy
+   - Paste: Ctrl+V or right-click on canvas > Paste
+   - Delete: Delete key or right-click > Delete
+   - Right-click on image for more options (flip, bring to front, etc.)
 
 4. **State Persistence**:
    - The application automatically saves its state when closed
@@ -105,10 +109,10 @@ ImageBoard/
 
 ## Keyboard Shortcuts
 
-(To be implemented in future versions)
-- Ctrl+C: Copy selected image
-- Ctrl+V: Paste image from clipboard
-- Delete: Remove selected image
+- **Ctrl+C**: Copy selected image
+- **Ctrl+V**: Paste copied image (creates a duplicate)
+- **Delete**: Remove selected image
+- **Ctrl + Mouse Wheel** (on image): Resize image
 
 ## Requirements
 

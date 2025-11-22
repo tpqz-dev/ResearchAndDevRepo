@@ -20,6 +20,7 @@
             <Border BorderBrush="{Binding IsSelected, Converter={StaticResource BoolToBorderBrushConverter}}"
                     BorderThickness="{Binding IsSelected, Converter={StaticResource BoolToBorderThicknessConverter}}"
                     Background="Transparent"
+                    helpers:ImageResizeBehavior.IsEnabled="True"
                     MouseLeftButtonDown="Image_MouseLeftButtonDown"
                     MouseMove="Image_MouseMove"
                     MouseLeftButtonUp="Image_MouseLeftButtonUp">
@@ -39,6 +40,9 @@
                                   Command="{Binding DataContext.FlipVerticalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                   CommandParameter="{Binding}"/>
                         <Separator/>
+                        <MenuItem Header="Copy" 
+                                  Command="{Binding DataContext.CopyImageCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding}"/>
                         <MenuItem Header="Reset Size" 
                                   Command="{Binding DataContext.ResetSizeCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                   CommandParameter="{Binding}"/>
@@ -73,6 +77,7 @@
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Add Images..." Command="{Binding AddImagesCommand}"/>
+                <MenuItem Header="Paste" Command="{Binding PasteImageCommand}"/>
                 <Separator/>
                 <MenuItem Header="Always on Top" 
                           IsCheckable="True"
