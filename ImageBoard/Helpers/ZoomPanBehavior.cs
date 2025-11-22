@@ -15,6 +15,13 @@ namespace ImageBoard.Helpers
                 typeof(ZoomPanBehavior),
                 new PropertyMetadata(false, OnIsEnabledChanged));
 
+        private static readonly DependencyProperty LastPanPointProperty =
+            DependencyProperty.RegisterAttached(
+                "LastPanPoint",
+                typeof(Point?),
+                typeof(ZoomPanBehavior),
+                new PropertyMetadata(null));
+
         public static bool GetIsEnabled(DependencyObject obj)
         {
             return (bool)obj.GetValue(IsEnabledProperty);
@@ -23,6 +30,16 @@ namespace ImageBoard.Helpers
         public static void SetIsEnabled(DependencyObject obj, bool value)
         {
             obj.SetValue(IsEnabledProperty, value);
+        }
+
+        private static Point? GetLastPanPoint(DependencyObject obj)
+        {
+            return (Point?)obj.GetValue(LastPanPointProperty);
+        }
+
+        private static void SetLastPanPoint(DependencyObject obj, Point? value)
+        {
+            obj.SetValue(LastPanPointProperty, value);
         }
 
         private static void OnIsEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -45,8 +62,6 @@ namespace ImageBoard.Helpers
                 }
             }
         }
-
-        private static Point? _lastPanPoint;
 
         private static void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -86,7 +101,7 @@ namespace ImageBoard.Helpers
             if (e.MiddleButton == MouseButtonState.Pressed || 
                 (e.LeftButton == MouseButtonState.Pressed && Keyboard.IsKeyDown(Key.Space)))
             {
-                _lastPanPoint = e.GetPosition(canvas);
+                SetLastPanPoint(canvas, e.GetPosition(canvas));
                 canvas.CaptureMouse();
                 canvas.Cursor = Cursors.Hand;
                 e.Handled = true;
@@ -97,7 +112,8 @@ namespace ImageBoard.Helpers
         {
             if (sender is not Canvas canvas) return;
             
-            if (_lastPanPoint.HasValue && canvas.IsMouseCaptured)
+            var lastPanPoint = GetLastPanPoint(canvas);
+            if (lastPanPoint.HasValue && canvas.IsMouseCaptured)
             {
                 var transform = canvas.RenderTransform as TransformGroup;
                 if (transform == null) return;
@@ -106,12 +122,12 @@ namespace ImageBoard.Helpers
                 if (translateTransform == null) return;
 
                 var currentPoint = e.GetPosition(canvas);
-                var delta = currentPoint - _lastPanPoint.Value;
+                var delta = currentPoint - lastPanPoint.Value;
 
                 translateTransform.X += delta.X;
                 translateTransform.Y += delta.Y;
 
-                _lastPanPoint = currentPoint;
+                SetLastPanPoint(canvas, currentPoint);
                 e.Handled = true;
             }
         }
@@ -120,9 +136,9 @@ namespace ImageBoard.Helpers
         {
             if (sender is not Canvas canvas) return;
 
-            if (_lastPanPoint.HasValue)
+            if (GetLastPanPoint(canvas).HasValue)
             {
-                _lastPanPoint = null;
+                SetLastPanPoint(canvas, null);
                 canvas.ReleaseMouseCapture();
                 canvas.Cursor = Cursors.Arrow;
                 e.Handled = true;

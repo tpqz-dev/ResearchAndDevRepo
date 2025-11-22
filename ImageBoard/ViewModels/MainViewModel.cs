@@ -47,6 +47,20 @@ namespace ImageBoard.ViewModels
             Directory.CreateDirectory(_imagesDirectory);
         }
 
+        private string GenerateUniqueImagePath(string sourceFilePath)
+        {
+            var extension = Path.GetExtension(sourceFilePath);
+            return Path.Combine(_imagesDirectory, Guid.NewGuid().ToString() + extension);
+        }
+
+        public void ClearSelection()
+        {
+            foreach (var img in Images)
+            {
+                img.IsSelected = false;
+            }
+        }
+
         [RelayCommand]
         private void AddImages()
         {
@@ -70,8 +84,7 @@ namespace ImageBoard.ViewModels
         {
             try
             {
-                var fileName = Path.GetFileName(sourceFilePath);
-                var destPath = Path.Combine(_imagesDirectory, Guid.NewGuid().ToString() + Path.GetExtension(fileName));
+                var destPath = GenerateUniqueImagePath(sourceFilePath);
                 
                 File.Copy(sourceFilePath, destPath, true);
 
@@ -187,8 +200,7 @@ namespace ImageBoard.ViewModels
                     var sourcePath = Path.Combine(_baseDirectory, _copiedImage.SourcePath);
                     if (File.Exists(sourcePath))
                     {
-                        var fileName = Path.GetFileName(sourcePath);
-                        var destPath = Path.Combine(_imagesDirectory, Guid.NewGuid().ToString() + Path.GetExtension(fileName));
+                        var destPath = GenerateUniqueImagePath(sourcePath);
                         
                         File.Copy(sourcePath, destPath, true);
 
@@ -210,10 +222,7 @@ namespace ImageBoard.ViewModels
                         Images.Add(viewModel);
                         
                         // Select the pasted image
-                        foreach (var img in Images)
-                        {
-                            img.IsSelected = false;
-                        }
+                        ClearSelection();
                         viewModel.IsSelected = true;
                         SelectedImage = viewModel;
                     }

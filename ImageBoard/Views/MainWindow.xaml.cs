@@ -96,13 +96,8 @@ namespace ImageBoard.Views
         {
             if (sender is Border border && border.DataContext is ImageItemViewModel imageVm)
             {
-                // Deselect all other images
-                foreach (var img in ViewModel.Images)
-                {
-                    img.IsSelected = false;
-                }
-                
-                // Select this image
+                // Deselect all other images and select this one
+                ViewModel.ClearSelection();
                 imageVm.IsSelected = true;
                 ViewModel.SelectedImage = imageVm;
 

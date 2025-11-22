@@ -4,7 +4,7 @@ namespace ImageBoard.Models
 {
     public class ImageItem
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
         public string SourcePath { get; set; } = string.Empty;
         public double X { get; set; }
         public double Y { get; set; }
@@ -14,5 +14,10 @@ namespace ImageBoard.Models
         public bool IsFlippedX { get; set; }
         public bool IsFlippedY { get; set; }
         public int ZIndex { get; set; }
+
+        public ImageItem()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 }
