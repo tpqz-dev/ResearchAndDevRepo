@@ -5,6 +5,7 @@
         xmlns:vm="clr-namespace:ImageBoard.ViewModels"
         Title="Image Board" 
         Height="800" Width="1200"
+        Topmost="{Binding IsTopMost}"
         AllowDrop="True"
         Drop="Window_Drop"
         DragOver="Window_DragOver"
@@ -96,8 +97,8 @@
                 helpers:ZoomPanBehavior.IsEnabled="True">
             <Canvas.RenderTransform>
                 <TransformGroup>
-                    <ScaleTransform ScaleX="{Binding ViewScale}" ScaleY="{Binding ViewScale}"/>
-                    <TranslateTransform X="{Binding ViewTranslateX}" Y="{Binding ViewTranslateY}"/>
+                    <ScaleTransform ScaleX="{Binding ViewScale, Mode=TwoWay}" ScaleY="{Binding ViewScale, Mode=TwoWay}"/>
+                    <TranslateTransform X="{Binding ViewTranslateX, Mode=TwoWay}" Y="{Binding ViewTranslateY, Mode=TwoWay}"/>
                 </TransformGroup>
             </Canvas.RenderTransform>
 
